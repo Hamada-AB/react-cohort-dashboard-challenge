@@ -17,11 +17,12 @@ import dark from "./assets/icons/dark.svg";
 // to get the active link in the nav bar
 function getClassName({ isActive }) {
   if (isActive) {
-    return "active"; // => CSS calss
+    return "active"; // => CSS class
   }
 }
 
 export const DataContext = createContext();
+export const baseUrl = "https://boolean-uk-api-server.fly.dev/Hamada-AB";
 
 export default function App() {
   const [posts, setPosts] = useState([]);
@@ -45,7 +46,7 @@ export default function App() {
   }
 
   useEffect(() => {
-    fetch("https://boolean-api-server.fly.dev/Hamada-AB/contact")
+    fetch(`${baseUrl}/contact`)
       .then((response) => response.json())
       .then((data) => {
         if (data && !data.error) {
@@ -57,7 +58,7 @@ export default function App() {
         setIsLoading(false);
       });
 
-    fetch("https://boolean-api-server.fly.dev/Hamada-AB/contact/1")
+    fetch(`${baseUrl}/contact/1`)
       .then((response) => response.json())
       .then((data) => {
         if (data && !data.error) {
@@ -69,7 +70,7 @@ export default function App() {
         setIsLoading(false);
       });
 
-    fetch("https://boolean-api-server.fly.dev/Hamada-AB/post")
+    fetch(`${baseUrl}/post`)
       .then((response) => response.json())
       .then((data) => {
         if (data && !data.error) {

@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { DataContext } from "../App";
+import { baseUrl } from "../App";
 
 export default function EditComment({
   post,
@@ -13,24 +14,22 @@ export default function EditComment({
 
   const contactId = user?.id;
   const postId = post?.id;
+  const fetchUrl = `${baseUrl}/post/${postId}/comment/${comment?.id}`;
 
   function handleFormSubmit(event) {
     event.preventDefault();
 
-    fetch(
-      `https://boolean-api-server.fly.dev/Hamada-AB/post/${postId}/comment/${comment?.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          postId,
-          contactId,
-          content,
-        }),
-      }
-    )
+    fetch(fetchUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        postId,
+        contactId,
+        content,
+      }),
+    })
       .then((response) => response.json())
       .then((data) => {
         setComments([...comments, data]);

@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
 import { DataContext } from "../App";
+import { baseUrl } from "../App";
 
 // components
 import AddComment from "./AddComment";
@@ -14,20 +15,20 @@ import editIcon from "../assets/icons/edit.svg";
 import deleteIcon from "../assets/icons/delete.svg";
 
 export default function Post() {
-  const { contacts, posts, setPosts } = useContext(DataContext);
   const [comments, setComments] = useState();
   const [contact, setContact] = useState();
   const [post, setPost] = useState();
   const [showEditBox, setShowEditBox] = useState(false);
   const [prevComments, setPrevComments] = useState(false);
 
+  const { contacts, posts, setPosts } = useContext(DataContext);
   const params = useParams();
   const navigate = useNavigate();
   const { id } = params;
-  const url = `https://boolean-api-server.fly.dev/Hamada-AB/post/`;
+  const fetchUrl = `${baseUrl}/post`;
 
   useEffect(() => {
-    fetch(`${url}${id}`)
+    fetch(`${fetchUrl}/${id}`)
       .then((response) => response.json())
       .then((data) => {
         if (data && !data.error) {
@@ -36,7 +37,7 @@ export default function Post() {
       })
       .catch((error) => console.error(error));
 
-    fetch(`${url}${id}/comment`)
+    fetch(`${fetchUrl}/${id}/comment`)
       .then((response) => response.json())
       .then((data) => {
         if (data && !data.error) {
@@ -58,7 +59,7 @@ export default function Post() {
     );
 
     if (isConfirmed) {
-      fetch(`${url}${id}`, {
+      fetch(`${fetchUrl}/${id}`, {
         method: "DELETE",
       })
         .then((response) => response.json())
@@ -66,6 +67,7 @@ export default function Post() {
           console.log(data);
           setPosts(posts.filter((post) => post.id !== data.id));
         });
+
       navigate("/");
     }
   }
@@ -132,7 +134,6 @@ export default function Post() {
                     key={index}
                     comment={comment}
                     contacts={contacts}
-                    url={url}
                     comments={comments}
                     setComments={setComments}
                     post={post}
@@ -149,7 +150,6 @@ export default function Post() {
                     key={index}
                     comment={comment}
                     contacts={contacts}
-                    url={url}
                     comments={comments}
                     setComments={setComments}
                     post={post}

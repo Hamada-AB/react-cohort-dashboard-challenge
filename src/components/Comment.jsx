@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { baseUrl } from "../App";
 
 // components
 import Avatar from "./Avatar";
@@ -13,7 +14,8 @@ export default function Comment(props) {
   const [commenter, setCommenter] = useState();
   const [showEditBox, setShowEditBox] = useState(false);
 
-  const { comment, contacts, url, comments, setComments, post } = props;
+  const { comment, contacts, comments, setComments, post } = props;
+  const fetchUrl = `${baseUrl}/post/${post?.id}/comment/${comment?.id}`;
 
   useEffect(() => {
     contacts.find((contact) => {
@@ -29,7 +31,7 @@ export default function Comment(props) {
     );
 
     if (isConfirmed) {
-      fetch(`${url}${post?.id}/comment/${comment?.id}`, {
+      fetch(fetchUrl, {
         method: "DELETE",
       })
         .then((response) => response.json())

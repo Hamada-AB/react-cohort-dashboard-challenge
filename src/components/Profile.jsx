@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { DataContext } from "../App";
+import { baseUrl } from "../App";
 
 // components
 import Avatar from "./Avatar";
@@ -27,10 +28,10 @@ export default function Profile() {
 
   const params = useParams();
   const contactId = params.id;
-  const url = `https://boolean-api-server.fly.dev/Hamada-AB/contact/${contactId}`;
+  const fetchUrl = `${baseUrl}/contact/${contactId}`;
 
   useEffect(() => {
-    fetch(url)
+    fetch(fetchUrl)
       .then((response) => response.json())
       .then((data) => {
         if (data && !data.error) {
@@ -47,7 +48,7 @@ export default function Profile() {
       .catch((error) => console.error(error));
 
     setShowSaveBtn(false);
-  }, [url, contacts]);
+  }, [fetchUrl, contacts]);
 
   function handleFormSubmit(event) {
     event.preventDefault();
@@ -67,7 +68,7 @@ export default function Profile() {
       setValidation("");
     }
 
-    fetch(url, {
+    fetch(fetchUrl, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

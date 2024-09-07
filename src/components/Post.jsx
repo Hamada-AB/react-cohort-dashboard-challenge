@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../App";
+import { baseUrl } from "../App";
 
 // components
 import AddComment from "./AddComment";
@@ -15,17 +16,18 @@ import deleteIcon from "../assets/icons/delete.svg";
 export default function Post(props) {
   const { contacts, posts, setPosts, mode } = useContext(DataContext);
 
-  const [comments, setComments] = useState();
+  const [comments, setComments] = useState([]);
   const [contact, setContact] = useState();
+  const [commentsDescending, setCommentsDescending] = useState([]);
 
   const [showEditBox, setShowEditBox] = useState(false);
   const [prevComments, setPrevComments] = useState(false);
 
   const { post } = props;
-  const url = "https://boolean-api-server.fly.dev/Hamada-AB/post/";
+  const fetchUrl = `${baseUrl}/post`;
 
   useEffect(() => {
-    fetch(`${url}${post?.id}/comment`)
+    fetch(`${fetchUrl}/${post?.id}/comment`)
       .then((response) => response.json())
       .then((data) => {
         if (data && !data.error) {
@@ -41,13 +43,27 @@ export default function Post(props) {
     });
   });
 
+  useEffect(() => {
+    setCommentsDescending(getCommentsDescending);
+  }, [comments]);
+
+  function getCommentsDescending() {
+    const descending = [];
+    for (let i = comments.length; i >= 0; i--) {
+      if (comments[i]) {
+        descending.push(comments[i]);
+      }
+    }
+    return descending;
+  }
+
   function handleDeleteClick() {
     const isConfirmed = confirm(
       `⛔ Are you sure you want to delete this post❓`
     );
 
     if (isConfirmed) {
-      fetch(`${url}${post.id}`, {
+      fetch(`${fetchUrl}/${post.id}`, {
         method: "DELETE",
       })
         .then((response) => response.json())
@@ -114,14 +130,13 @@ export default function Post(props) {
 
         <article className="comments">
           {comments &&
-            comments.map((comment, index) => {
+            commentsDescending.map((comment, index) => {
               if (index <= 2) {
                 return (
                   <Comment
                     key={index}
                     comment={comment}
                     contacts={contacts}
-                    url={url}
                     comments={comments}
                     setComments={setComments}
                     post={post}
@@ -131,14 +146,13 @@ export default function Post(props) {
             })}
 
           {prevComments &&
-            comments.map((comment, index) => {
+            commentsDescending.map((comment, index) => {
               if (index > 2) {
                 return (
                   <Comment
                     key={index}
                     comment={comment}
                     contacts={contacts}
-                    url={url}
                     comments={comments}
                     setComments={setComments}
                     post={post}

@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { DataContext } from "../App";
+import { baseUrl } from "../App";
 
 // components
 import Avatar from "./Avatar";
@@ -22,7 +23,7 @@ export default function CreatePost() {
   function handleFormSubmit(event) {
     event.preventDefault();
 
-    fetch("https://boolean-api-server.fly.dev/Hamada-AB/post", {
+    fetch(`${baseUrl}/post`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

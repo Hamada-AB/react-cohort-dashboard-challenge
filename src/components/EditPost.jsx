@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { DataContext } from "../App";
+import { baseUrl } from "../App";
 
 export default function EditPost({ post, showEditBox, setShowEditBox }) {
   const { user, posts, setPosts } = useContext(DataContext);
@@ -8,6 +9,7 @@ export default function EditPost({ post, showEditBox, setShowEditBox }) {
 
   const subContent = content[0]?.toUpperCase() + content.substring(1, 20);
   const contactId = user?.id;
+  const fetchUrl = `${baseUrl}/post/${post?.id}`;
 
   useEffect(() => {
     setTitle(subContent);
@@ -16,7 +18,7 @@ export default function EditPost({ post, showEditBox, setShowEditBox }) {
   function handleFormSubmit(event) {
     event.preventDefault();
 
-    fetch(`https://boolean-api-server.fly.dev/Hamada-AB/post/${post?.id}`, {
+    fetch(fetchUrl, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
